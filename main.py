@@ -52,7 +52,7 @@ class Dataset:
     @staticmethod
     def check_input(vacancy):
         if vacancy == 'qwertyuiop':
-            return 'abobaaboba'
+            return 'abobaabobasvljsdjbvjsdb'
 
     @staticmethod
     def prepare_csv(file_name, vacancy):
