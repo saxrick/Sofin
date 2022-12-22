@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+</head>
+<body><font face="Verdana">
+  <h1 align="center">Аналитика по зарплатам для профессии {{ vacancy }}</h1>
+  <center>
+    <img src='C:/Users/Артем/PycharmProjects/pythonProject14/graph.png'>
+  </center>
+  <h2 align="center">Статистика по годам</h2>
+  <table border="1" class="dataframe" align="center" >
+      <thead>
+        <tr style="text-align: right;">
+          <th>Год</th>
+          <th>Средняя зарплата</th>
+          <th>Средняя зарплата - Аналитик</th>
+          <th>Количество вакансий</th>
+          <th>Количество вакансий - Аналитик</th>
+        </tr>
+      </thead>
+      <tbody>
+{{ cities_statistics }}
+      </tbody>
+  </table>
+  <h2 align="center">Статистика по городам</h2>
+  <table align="center"><tr><td>
+  <table border="1" class="dataframe">
+    <thead>
+      <tr style="text-align: right;">
+        <th>Город</th>
+        <th>Уровень зарплат</th>
+    </thead>
+    <tbody>
+{{ cities_salaries_statistics }}
+    </tbody>
+  </table>
+  </td><td>
+  <table border="1" class="dataframe">
+    <thead>
+      <tr style="text-align: right;">
+        <th>Город</th>
+        <th>Доля вакансий</th>
+      </tr>
+    </thead>
+    <tbody>
+{{ cities_vacancies_statistics }}
+    </tbody>
+  </table>
+  </td></tr></table>
+</font></body>
+</html>
