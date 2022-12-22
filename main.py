@@ -11,12 +11,22 @@ import pdfkit
 
 
 class PrepareData:
+    """Класс для подготовки данных
+
+    Attributes:
+        line(dict): строка для проверки
+        salary(list): зарплата
+    """
     def __init__(self, line, salary):
         self.line = line
         self.salary = salary
-
     @staticmethod
     def sorter(line):
+        """Сортировка данных от пустых строк
+
+        Args:
+            line(dict): строка на проверку
+        """
         line1 = line.copy()
         for i in line1.keys():
             if line1[i] == [] or line1[i] == 0:
@@ -25,6 +35,11 @@ class PrepareData:
 
     @staticmethod
     def converter(salary):
+        """конвертация валют в рубли
+
+        Args:
+            salary(list) зарплата
+        """
         salary_data = salary[0]
         salary_currency = salary[1]
         currency_to_rub = {
@@ -45,17 +60,35 @@ class PrepareData:
 
 
 class Dataset:
+    """
+    Класс для обработки данных
+
+    Attributes:
+        file_name(str): название файла
+        vacancy(str): название вакансии
+    """
     def __init__(self):
         self.file_name = input('Введите название файла: ')
         self.vacancy = input('Введите название профессии: ')
 
     @staticmethod
     def check_input(vacancy):
+        """Проверка введенных данных
+
+        Args:
+            vacancy(str): название вакансии на проверку
+        """
         if vacancy == 'qwertyuiop':
             return ''
 
     @staticmethod
     def prepare_csv(file_name, vacancy):
+        """обработка данных о вакансиях вывод информации о вакансиях в консоль
+
+        Args:
+            file_name(str): название файла
+            vacancy(str): название вакансии
+        """
         pd.set_option('expand_frame_repr', False)
 
         df = pd.read_csv(file_name)
@@ -105,12 +138,30 @@ class Dataset:
 
 
 class Report(Dataset):
+    """Класс для создания отчетов в удобном для чтения виде"""
     @staticmethod
     def name_cell(letter, number):
+        """собирает название ячейки
+
+        Args:
+            letter(str): буква ячейки
+            number(int): число ячейки
+
+        Returns:
+            str: название ячейки
+        """
         return f'{letter}{number}'
 
     @staticmethod
     def cell_generator(list_name, dict_name, letter1, letter2):
+        """Заполнение ячеек
+
+        Args:
+            list_name(): лист эксель
+            dict_name(dict): словарь со значениями зарплат
+            letter1(str): буква первой ячейки
+            letter2(str): буква второй ячейки
+        """
         c = 2
         for key, value in dict_name.items():
             list_name[Report.name_cell(letter1, c)] = key
@@ -119,6 +170,13 @@ class Report(Dataset):
 
     @staticmethod
     def cell_generator_small(list_name, dict_name, letter):
+        """Заполнение одной ячейки
+
+        Args:
+            list_name(): лист эксель
+            dict_name(dict): словарь со значениями зарплат
+            letter(str): буква первой ячейки
+        """
         c = 2
         for i in dict_name.values():
             list_name[Report.name_cell(letter, c)] = i
@@ -126,6 +184,12 @@ class Report(Dataset):
 
     @staticmethod
     def set_border(ws, cell_range):
+        """Устанавливает границы в таблице
+
+        Args:
+            ws: лист эксель
+            cell_range: диапазон ячеек
+        """
         thin = Side(border_style="thin", color="000000")
         for row in ws[cell_range]:
             for cell in row:
@@ -133,6 +197,11 @@ class Report(Dataset):
 
     @staticmethod
     def set_width(list_name):
+        """Устанавливает ширину столбца
+
+        Args:
+            list_name(): лист эксель
+        """
         for cell in chain.from_iterable(list_name.iter_cols()):
             if cell.value:
                 list_name.column_dimensions[cell.column_letter].width = max(
@@ -142,14 +211,21 @@ class Report(Dataset):
 
     @staticmethod
     def get_data():
+        """Получает данные о вакансиях и название требуемой вакансии
+
+        Returns:
+            list: подготовленные данные и название вакансии
+        """
         a = Dataset()
         return [Dataset.prepare_csv(a.file_name, a.vacancy), a.vacancy]
 
 
     @staticmethod
     def generate_excel():
+        """Создает эксель файл"""
         getdata = Report.get_data()
         data = getdata[0]
+        print(data)
         vacancy = getdata[1]
         wb = openpyxl.Workbook()
         ws = wb.active
@@ -197,12 +273,23 @@ class Report(Dataset):
 
     @staticmethod
     def font_size(ax, size):
+        """Устанавливает размер шрифта
+
+        Args:
+            ax: график
+            size(int): размер шрифта
+        """
         for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] +
                      ax.get_xticklabels() + ax.get_yticklabels()):
             item.set_fontsize(size)
 
     @staticmethod
     def generate_image():
+        """Создает изображение графика
+
+        Returns:
+            str: название вакансии
+        """
         getdata = Report.generate_excel()
         data = getdata[0]
         vacancy = getdata[1]
@@ -273,6 +360,7 @@ class Report(Dataset):
 
     @staticmethod
     def generate_pdf():
+        """Создает PDF-файл по шаблону HTML-файла"""
         vacancy = Report.generate_image()
         pd.set_option('expand_frame_repr', False)
         wb = pd.ExcelFile("report.xlsx")
