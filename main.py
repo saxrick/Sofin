@@ -82,6 +82,23 @@ class Dataset:
             return ''
 
     @staticmethod
+    def split_csv(file_name):
+        """Разделяет CSV-файл на несколько по годам
+
+        :param file_name: название файла
+        """
+        pd.set_option('expand_frame_repr', False)
+
+        df = pd.read_csv(file_name)
+        df = df.dropna(subset=df.columns.values)
+        df = df[['name', 'salary_from', 'salary_to', 'salary_currency', 'area_name', 'published_at']]
+        df['published_at'] = df['published_at'].apply(lambda x: int(x[0:4]))
+        years = df['published_at'].unique()
+        for year in years:
+            chunk = df.loc[df.published_at == year]
+            chunk.to_csv(f'chunks/{year}.csv')
+
+    @staticmethod
     def prepare_csv(file_name, vacancy):
         """обработка данных о вакансиях вывод информации о вакансиях в консоль
 
@@ -402,4 +419,5 @@ class Report(Dataset):
         pdfkit.from_string(pdf_template, 'report.pdf', configuration=config, options={"enable-local-file-access": ""})
 
 
-Report.generate_pdf()
+#Report.generate_pdf()
+Dataset.split_csv('vacancies_by_year.csv')
