@@ -420,5 +420,5 @@ class Report(Dataset):
         pdfkit.from_string(pdf_template, 'report.pdf', configuration=config, options={"enable-local-file-access": ""})
 
 
-Report.generate_pdf()
+#Report.generate_pdf()
 Dataset.split_csv('vacancies_by_year.csv')
