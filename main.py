@@ -97,7 +97,7 @@ class Dataset:
         for year in years:
             chunk = df.loc[df.published_at == year]
             chunk.to_csv(f'chunks/{year}.csv')
-            print('aboba')
+
 
     @staticmethod
     def prepare_csv(file_name, vacancy):
